@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body class="bg-gray-100">
+  <!-- Navigation -->
+  <nav class="bg-white border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+      <div>
+        <a href="/" class="font-bold text-gray-800 text-2xl">Horizon Homes</a>
+      </div>
+      <ul class="flex space-x-4">
+        <% if (isLoggedIn) { %>
+        <li>
+          <a href="/" class="text-green-600 hover:text-green-700">Home</a>
+        </li>
+        <li>
+          <a href="/api/v1/houses/add-house" class="text-green-600 hover:text-green-700">Post Property</a>
+        </li>
+        <li>
+          <a href="/api/v1/users/logout" class="text-green-600 hover:text-green-700">Logout</a>
+        </li>
+        <li>
+          <a href="/api/v1/users/profile" class="text-blue-600 hover:text-blue-700">
+            <i class="fa fa-user fa-lg" aria-hidden="true"></i>
+          </a>
+        </li>
+        <% } else { %>
+        <li>
+          <a href="/api/v1/users/register" class="text-blue-600 hover:text-blue-700">Register</a>
+        </li>
+        <li>
+          <a href="/api/v1/users/login" class="text-blue-600 hover:text-blue-700">Login</a>
+        </li>
+        <% } %>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content Section -->
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- User Details Section -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+      <h2 class="text-2xl font-bold mb-4">Profile Details</h2>
+      <div class="text-gray-700">
+        <p><strong>Name:</strong> <%= userFound.firstName.toUpperCase() + ' ' + userFound.lastName.toUpperCase() %></p>
+        <p><strong>Email:</strong> <%= userFound.email %></p>
+        <p><strong>Phone:</strong> <%= userFound.phone %></p>
+      </div>
+    </div>
+
+    <!-- Houses Section -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <% userFound.house.forEach(house => { %>
+      <div class="border border-gray-200 rounded-lg overflow-hidden bg-white">
+        <img src="<%= house.image.url %>" alt="House Image" class="w-full h-48 object-cover p-2 rounded-t" />
+        <div class="p-4">
+          <h2 class="text-xl font-bold mb-2 text-gray-800"><%= house.place %></h2>
+          <p class="text-gray-600 mb-2">Price: <%= house.cost %> lakhs</p>
+          <p class="text-gray-600 mb-2">Sqft: <%= house.sqft %> </p>
+          <p class="text-gray-600 mb-2">BHK: <%= house.bhk %></p>
+          <p class="text-gray-600 mb-2">Address: <%= house.address %></p>
+          <div class="flex justify-end mt-4">
+            <a href="/api/v1/houses/update-house/<%= house._id %>" class="text-blue-500 hover:text-blue-700 mr-2">
+              <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            </a>
+            <form action="/api/v1/houses/delete/<%=house?._id%>/?_method=DELETE" method="post" >
+              <button>
+                <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+              </button>
+            </form>
+
+          </div>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Footer Section 1: Logo and Navigation -->
+        <div>
+          <h2 class="text-lg font-bold mb-4">Real Estate Company</h2>
+          <ul class="space-y-2">
+            <li><a href="/" class="text-gray-400 hover:text-gray-200 transition duration-300">Home</a></li>
+            <li><a href="/about" class="text-gray-400 hover:text-gray-200 transition duration-300">About Us</a></li>
+            <li><a href="/services" class="text-gray-400 hover:text-gray-200 transition duration-300">Services</a></li>
+            <li><a href="/contact" class="text-gray-400 hover:text-gray-200 transition duration-300">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Footer Section 2: Contact Information -->
+        <div>
+          <h2 class="text-lg font-bold mb-4">Contact Us</h2>
+          <p class="text-gray-400">123 Street, City</p>
+          <p class="text-gray-400">Phone: +1 234 567 890</p>
+          <p class="text-gray-400">Email: info@example.com</p>
+        </div>
+
+        <!-- Footer Section 3: Social Media Links -->
+        <div>
+          <h2 class="text-lg font-bold mb-4">Follow Us</h2>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-gray-200 transition duration-300">
+              <i class="fa fa-facebook-square fa-lg" aria-hidden="true"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-gray-200 transition duration-300">
+              <i class="fa fa-twitter-square fa-lg" aria-hidden="true"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-gray-200 transition duration-300">
+              <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Copyright and Legal -->
+      <div class="mt-8 border-t border-gray-600 pt-4 text-sm text-gray-400">
+        <p>&copy; 2024 Real Estate Company. All rights reserved.</p>
+        <p>Terms of Service | Privacy Policy</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>

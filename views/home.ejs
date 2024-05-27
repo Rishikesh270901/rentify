@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home Page</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+</head>
+<body class="bg-gray-100">
+
+<!-- Navigation Section -->
+<div class="border-b border-gray-200 bg-white">
+  <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+    <div>
+      <a href="/" class="font-bold text-gray-800 text-2xl">Horizon Homes</a>
+    </div>
+    <nav>
+      <ul class="flex space-x-4">
+        <% if (isLoggedIn) { %>
+          <li><a href="/api/v1/houses/add-house" class="text-green-600 hover:text-green-700">Post Property</a></li>
+          <li><a href="/api/v1/users/logout" class="text-green-600 hover:text-green-700">Logout</a></li>
+          <li><a href="/api/v1/users/profile" class="text-green-600 hover:text-green-700"><i class="fa fa-user" aria-hidden="true" style='font-size: 24px;'></i></a></li>
+        <% } else { %>
+          <li><a href="/api/v1/users/register" class="text-blue-600 hover:text-blue-700">Register</a></li>
+          <li><a href="/api/v1/users/login" class="text-blue-600 hover:text-blue-700">Login</a></li>
+        <% } %>
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<!-- Search Section -->
+<div class="flex items-center justify-center p-4">
+  <form action="/api/v1/houses/filter" class="max-w-3xl w-1/2 bg-white border border-gray-300 rounded-full h-12 flex items-center justify-between px-4" method="get">
+    <input class="w-full bg-transparent placeholder-gray-500 border-none rounded-full h-full px-4 focus:outline-none" type="text" name="place" placeholder="Search using place...">
+    <button type="submit" class="bg-green-600 text-white rounded-full w-10 h-10 flex items-center justify-center focus:outline-none hover:bg-blue-600">
+      <a href="/api/v1/houses/filter"><i class="fa fa-search" aria-hidden="true"></i></a>
+    </button>
+  </form>
+</div>
+
+<!-- Houses Section -->
+<div class="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+  <% houses.forEach(house => { %>
+    <div class="border border-gray-200 rounded-lg overflow-hidden bg-white">
+      <img src="<%= house.image.url %>" alt="House Image" class="w-full h-48 object-cover p-2 rounded-t" />
+      <div class="p-4">
+        <h2 class="text-xl font-bold mb-2 text-gray-800"><%= house.place %></h2>
+        <p class="text-gray-600 mb-2">Price: <%= house.cost %> lakhs</p>
+        <p class="text-gray-600 mb-2">Sqft: <%= house.sqft %></p>
+        <p class="text-gray-600 mb-2">BHK: <%= house.bhk %></p>
+        <p class="text-gray-600 mb-2">Address: <%= house.address %></p>
+      </div>
+    </div>
+  <% }); %>
+</div>
+
+<!-- Footer Section -->
+<footer class="bg-gray-800 text-white py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Footer Section 1: Logo and Navigation -->
+      <div class="col-span-1 md:col-span-1">
+        <h2 class="text-lg font-bold mb-4">Real Estate Company</h2>
+        <ul class="space-y-2">
+          <li><a href="/" class="text-gray-400 hover:text-gray-200 transition duration-300">Home</a></li>
+          <li><a href="/about" class="text-gray-400 hover:text-gray-200 transition duration-300">About Us</a></li>
+          <li><a href="/services" class="text-gray-400 hover:text-gray-200 transition duration-300">Services</a></li>
+          <li><a href="/contact" class="text-gray-400 hover:text-gray-200 transition duration-300">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Footer Section 2: Contact Information -->
+      <div class="col-span-1 md:col-span-1">
+        <h2 class="text-lg font-bold mb-4">Contact Us</h2>
+        <p class="text-gray-400">123 Street, City</p>
+        <p class="text-gray-400">Phone: +1 234 567 890</p>
+        <p class="text-gray-400">Email: info@example.com</p>
+      </div>
+
+      <!-- Footer Section 3: Social Media Links -->
+      <div class="col-span-1 md:col-span-1">
+        <h2 class="text-lg font-bold mb-4">Follow Us</h2>
+        <div class="flex space-x-4">
+          <a href="#" class="text-gray-400 hover:text-gray-200 transition duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-gray-200 transition duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h18v18H3V3z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 8v8m-4-4h8" />
+            </svg>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-gray-200 transition duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h18v18H3V3z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 6a3 3 0 100 6 3 3 0 000-6z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15v3a2 2 0 01-2 2H5a2 2 0 01-2-2v-3m4-10v3H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V10a2 2 0 00-2-2h-2V7m4-2h-3V3"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Copyright and Legal -->
+    <div class="mt-8 border-t border-gray-600 pt-4 text-sm text-gray-400">
+      <p>&copy; 2024 Real Estate Company. All rights reserved.</p>
+      <p>Terms of Service | Privacy Policy</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

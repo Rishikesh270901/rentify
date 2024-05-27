@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add New House</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+</head>
+
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+  <div class="bg-white w-full md:max-w-xl p-8 rounded-lg shadow-md">
+    <h1 class="text-2xl font-bold mb-6 text-center">Add New House</h1>
+    <form action="/api/v1/houses/update-house/<%=house._id %>/?_method=PUT" method="POST" enctype="multipart/form-data">
+      <div class="mb-4">
+        <label for="place" class="block text-sm font-medium text-gray-700">Place</label>
+        <input id="place" name="place" type="text" placeholder="Enter place" required
+          class="w-full px-3 py-2 mt-1 placeholder-gray-400 border rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
+      </div>
+      <div class="mb-4">
+        <label for="cost" class="block text-sm font-medium text-gray-700">Cost</label>
+        <input id="cost" name="cost" type="number" placeholder="Enter cost" required
+          class="w-full px-3 py-2 mt-1 placeholder-gray-400 border rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
+      </div>
+      <div class="mb-4">
+        <label for="sqft" class="block text-sm font-medium text-gray-700">Sqft</label>
+        <input id="sqft" name="sqft" type="number" placeholder="Enter sqft" required
+          class="w-full px-3 py-2 mt-1 placeholder-gray-400 border rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
+      </div>
+      <div class="mb-4">
+        <label for="bhk" class="block text-sm font-medium text-gray-700">BHK</label>
+        <input id="bhk" name="bhk" type="number" placeholder="Enter BHK" required
+          class="w-full px-3 py-2 mt-1 placeholder-gray-400 border rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
+      </div>
+      <div class="mb-4">
+        <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
+        <input id="address" name="address" type="text" placeholder="Enter address" required
+          class="w-full px-3 py-2 mt-1 placeholder-gray-400 border rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
+      </div>
+      <div class="mb-6">
+        <label for="image" class="block text-sm font-medium text-gray-700">Upload Image</label>
+        <input id="image" name="image" type="file" accept="image/*" required
+          class="w-full px-3 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
+      </div>
+      <div class="flex justify-center">
+        <button type="submit"
+          class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300">
+          Update
+        </button>
+      </div>
+    </form>
+  </div>
+</body>
+
+</html>
