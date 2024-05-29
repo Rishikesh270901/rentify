@@ -24,6 +24,11 @@ const houseSchema = new mongoose.Schema({
   address:{
     type:String,
     required: true,
+  },
+  categories : {
+    type:String,
+    required: true,
+    enum : ['House', 'Apartment', 'Land', 'Building', 'Flat']
   }
 });
 

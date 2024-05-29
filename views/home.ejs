@@ -6,9 +6,30 @@
   <title>Home Page</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  <style>
+    .swiper-button-next, .swiper-button-prev {
+      background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+      border-radius: 50%;
+      color: white; /* White arrow color */
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .swiper-button-next:hover, .swiper-button-prev:hover {
+      background-color: rgba(0, 0, 0, 0.7); /* Darker on hover */
+    }
+
+    .swiper-button-next:after, .swiper-button-prev:after {
+      font-size: 20px; /* Increase arrow size */
+    }
+  </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100 w-screen h-screen">
 
 <!-- Navigation Section -->
 <div class="border-b border-gray-200 bg-white">
@@ -23,8 +44,8 @@
           <li><a href="/api/v1/users/logout" class="text-green-600 hover:text-green-700">Logout</a></li>
           <li><a href="/api/v1/users/profile" class="text-green-600 hover:text-green-700"><i class="fa fa-user" aria-hidden="true" style='font-size: 24px;'></i></a></li>
         <% } else { %>
-          <li><a href="/api/v1/users/register" class="text-blue-600 hover:text-blue-700">Register</a></li>
-          <li><a href="/api/v1/users/login" class="text-blue-600 hover:text-blue-700">Login</a></li>
+          <li><a href="/api/v1/users/register" class="text-green-600 hover:text-green-700">Register</a></li>
+          <li><a href="/api/v1/users/login" class="text-green-600 hover:text-green-700">Login</a></li>
         <% } %>
       </ul>
     </nav>
@@ -36,25 +57,63 @@
   <form action="/api/v1/houses/filter" class="max-w-3xl w-1/2 bg-white border border-gray-300 rounded-full h-12 flex items-center justify-between px-4" method="get">
     <input class="w-full bg-transparent placeholder-gray-500 border-none rounded-full h-full px-4 focus:outline-none" type="text" name="place" placeholder="Search using place...">
     <button type="submit" class="bg-green-600 text-white rounded-full w-10 h-10 flex items-center justify-center focus:outline-none hover:bg-blue-600">
-      <a href="/api/v1/houses/filter"><i class="fa fa-search" aria-hidden="true"></i></a>
+      <i class="fa fa-search" aria-hidden="true"></i>
     </button>
   </form>
 </div>
 
-<!-- Houses Section -->
-<div class="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-  <% houses.forEach(house => { %>
-    <div class="border border-gray-200 rounded-lg overflow-hidden bg-white">
-      <img src="<%= house.image.url %>" alt="House Image" class="w-full h-48 object-cover p-2 rounded-t" />
-      <div class="p-4">
-        <h2 class="text-xl font-bold mb-2 text-gray-800"><%= house.place %></h2>
-        <p class="text-gray-600 mb-2">Price: <%= house.cost %> lakhs</p>
-        <p class="text-gray-600 mb-2">Sqft: <%= house.sqft %></p>
-        <p class="text-gray-600 mb-2">BHK: <%= house.bhk %></p>
-        <p class="text-gray-600 mb-2">Address: <%= house.address %></p>
-      </div>
+<!-- Filter Section -->
+<div class="flex items-center justify-center p-4">
+  <form action="/api/v1/houses/filtered" method="get" class="max-w-3xl w-full bg-white border border-gray-300 rounded-lg p-4 flex flex-wrap space-y-4 md:space-y-0 md:flex-nowrap">
+    <div class="flex flex-col w-full md:w-1/4 px-2 pr-6">
+      <label for="type" class="text-gray-700 mb-2">Type</label>
+      <select name="categories" id="categories" class="border border-gray-300 rounded-lg p-2 focus:ring-green-500 focus:border-green-500">
+        <option value="">Select Type</option>
+        <option value="House">House</option>
+        <option value="Apartment">Apartment</option>
+        <option value="Land">Land</option>
+      </select>
     </div>
-  <% }); %>
+    <div class="flex flex-col w-full md:w-1/4 px-2 ml-5">
+      <label for="location" class="text-gray-700 mb-2">Location</label>
+      <select name="place" id="place" class="border border-gray-300 rounded-lg p-2 focus:ring-green-500 focus:border-green-500">
+        <option value="">Select Location</option>
+        <% location.forEach(location => { %>
+          <option value="<%=location %>"><%= location %></option>
+        <% }); %>
+      </select>
+    </div>
+    <div class="flex items-end w-full md:w-1/4 px-2">
+      <button type="submit" class="bg-green-600 text-white rounded-lg px-4 py-2 w-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+        Apply Filters
+      </button>
+    </div>
+  </form>
+</div>
+
+
+
+<!-- Houses Section -->
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <div class="swiper-container">
+    <div class="swiper-wrapper">
+      <% houses.forEach(house => { %>
+        <div class="swiper-slide border border-gray-200 rounded-lg overflow-hidden bg-white">
+          <img src="<%= house.image.url %>" alt="House Image" class="w-full h-48 object-cover p-2 rounded-t" />
+          <div class="p-4">
+            <h2 class="text-xl font-bold mb-2 text-gray-800"><%= house.address + ', ' + house.place %></h2>
+            <p class="text-gray-600 mb-2">Price: <%= house.cost %> lakhs</p>
+            <p class="text-gray-600 mb-2">Sqft: <%= house.sqft %></p>
+            <p class="text-gray-600 mb-2">BHK: <%= house.bhk %></p>
+            <p class="text-gray-600 mb-2">Category: <%= house.categories %></p>
+          </div>
+        </div>
+      <% }); %>
+    </div>
+    <!-- Add Navigation -->
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+  </div>
 </div>
 
 <!-- Footer Section -->
@@ -113,6 +172,37 @@
     </div>
   </div>
 </footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var swiper = new Swiper('.swiper-container', {
+      slidesPerView: 1,
+      spaceBetween: 10,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      breakpoints: {
+        640: {
+          slidesPerView: 1,
+          spaceBetween: 20,
+        },
+        768: {
+          slidesPerView: 2,
+          spaceBetween: 30,
+        },
+        1024: {
+          slidesPerView: 3,
+          spaceBetween: 40,
+        },
+      },
+    });
+  });
+</script>
 
 </body>
 </html>

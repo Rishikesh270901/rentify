@@ -5,6 +5,7 @@ const {
   houseUpdate,
   deleteHouse,
   findHouseCtrl,
+  filterHouse,
 } = require("../controllers/house");
 const isAuthenticated = require("../middleware/isAuthenticated");
 const House = require("../models/house");
@@ -22,6 +23,7 @@ houseRouter.get("/update-house/:id", async (req, res) => {
 houseRouter.put("/update-house/:id", houseUpdate);
 houseRouter.delete("/delete/:id", deleteHouse);
 houseRouter.get("/filter", findHouseCtrl)
+houseRouter.get("/filtered", filterHouse)
 houseRouter.get("/allhouses", getAllHousesCtrl);
 houseRouter.get("/filterHouses", getAllHousesCtrl);
 module.exports = houseRouter;

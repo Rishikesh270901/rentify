@@ -7,6 +7,28 @@
   <title>Profile</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  <style>
+    .swiper-button-next, .swiper-button-prev {
+      background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+      border-radius: 50%;
+      color: white; /* White arrow color */
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .swiper-button-next:hover, .swiper-button-prev:hover {
+      background-color: rgba(0, 0, 0, 0.7); /* Darker on hover */
+    }
+
+    .swiper-button-next:after, .swiper-button-prev:after {
+      font-size: 20px; /* Increase arrow size */
+    }
+  </style>
 </head>
 
 <body class="bg-gray-100">
@@ -34,10 +56,10 @@
         </li>
         <% } else { %>
         <li>
-          <a href="/api/v1/users/register" class="text-blue-600 hover:text-blue-700">Register</a>
+          <a href="/api/v1/users/register" class="text-green-600 hover:text-green-700">Register</a>
         </li>
         <li>
-          <a href="/api/v1/users/login" class="text-blue-600 hover:text-blue-700">Login</a>
+          <a href="/api/v1/users/login" class="text-green-600 hover:text-green-700">Login</a>
         </li>
         <% } %>
       </ul>
@@ -57,30 +79,34 @@
     </div>
 
     <!-- Houses Section -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-      <% userFound.house.forEach(house => { %>
-      <div class="border border-gray-200 rounded-lg overflow-hidden bg-white">
-        <img src="<%= house.image.url %>" alt="House Image" class="w-full h-48 object-cover p-2 rounded-t" />
-        <div class="p-4">
-          <h2 class="text-xl font-bold mb-2 text-gray-800"><%= house.place %></h2>
-          <p class="text-gray-600 mb-2">Price: <%= house.cost %> lakhs</p>
-          <p class="text-gray-600 mb-2">Sqft: <%= house.sqft %> </p>
-          <p class="text-gray-600 mb-2">BHK: <%= house.bhk %></p>
-          <p class="text-gray-600 mb-2">Address: <%= house.address %></p>
-          <div class="flex justify-end mt-4">
-            <a href="/api/v1/houses/update-house/<%= house._id %>" class="text-blue-500 hover:text-blue-700 mr-2">
-              <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
-            </a>
-            <form action="/api/v1/houses/delete/<%=house?._id%>/?_method=DELETE" method="post" >
-              <button>
-                <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
-              </button>
-            </form>
-
+    <div class="swiper-container">
+      <div class="swiper-wrapper">
+        <% userFound.house.forEach(house => { %>
+        <div class="swiper-slide border border-gray-200 rounded-lg overflow-hidden bg-white">
+          <img src="<%= house.image.url %>" alt="House Image" class="w-full h-48 object-cover p-2 rounded-t" />
+          <div class="p-4">
+            <h2 class="text-xl font-bold mb-2 text-gray-800"><%= house.address + ', ' + house.place %></h2>
+            <p class="text-gray-600 mb-2">Price: <%= house.cost %> lakhs</p>
+            <p class="text-gray-600 mb-2">Sqft: <%= house.sqft %></p>
+            <p class="text-gray-600 mb-2">BHK: <%= house.bhk %></p>
+            <p class="text-gray-600 mb-2">Category: <%= house.categories %></p>
+            <div class="flex justify-end mt-4">
+              <a href="/api/v1/houses/update-house/<%= house._id %>" class="text-blue-500 hover:text-blue-700 mr-2">
+                <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+              </a>
+              <form action="/api/v1/houses/delete/<%= house._id %>?_method=DELETE" method="post">
+                <button class="text-red-500 hover:text-red-700">
+                  <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                </button>
+              </form>
+            </div>
           </div>
         </div>
+        <% }); %>
       </div>
-      <% }); %>
+      <!-- Add Navigation -->
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
     </div>
   </div>
 
@@ -131,6 +157,38 @@
       </div>
     </div>
   </footer>
+
+  <!-- Swiper Initialization Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var swiper = new Swiper('.swiper-container', {
+        slidesPerView: 1,
+        spaceBetween: 10,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+        },
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+          640: {
+            slidesPerView: 1,
+            spaceBetween: 20,
+          },
+          768: {
+            slidesPerView: 2,
+            spaceBetween: 30,
+          },
+          1024: {
+            slidesPerView: 3,
+            spaceBetween: 40,
+          },
+        },
+      });
+    });
+  </script>
 
 </body>
 

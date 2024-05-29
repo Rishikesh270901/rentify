@@ -3,10 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home Page</title>
+  <title>Filter</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+  <!-- Add Swiper CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+  <style>
+    /* Optional: Adjust Swiper container size */
+    .swiper-container {
+      width: 100%;
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+    .swiper-slide {
+      background-position: center;
+      background-size: cover;
+    }
+  </style>
 </head>
 <body class="bg-gray-100">
 
@@ -24,29 +38,44 @@
           <li><a href="/api/v1/users/logout" class="text-green-600 hover:text-green-700">Logout</a></li>
           <li><a href="/api/v1/users/profile" class="text-green-600 hover:text-green-700"><i class="fa fa-user" aria-hidden="true" style='font-size: 24px;'></i></a></li>
         <% } else { %>
-          <li><a href="/api/v1/users/register" class="text-blue-600 hover:text-blue-700">Register</a></li>
-          <li><a href="/api/v1/users/login" class="text-blue-600 hover:text-blue-700">Login</a></li>
+          <li><a href="/api/v1/users/register" class="text-green-600 hover:text-green-700">Register</a></li>
+          <li><a href="/api/v1/users/login" class="text-green-600 hover:text-green-700">Login</a></li>
         <% } %>
       </ul>
     </nav>
   </div>
 </div>
 
+<!-- Search Section -->
+<div class="flex items-center justify-center p-4">
+  <form action="/api/v1/houses/filter" class="max-w-3xl w-1/2 bg-white border border-gray-300 rounded-full h-12 flex items-center justify-between px-4" method="get">
+    <input class="w-full bg-transparent placeholder-gray-500 border-none rounded-full h-full px-4 focus:outline-none" type="text" name="place" placeholder="Search using place...">
+    <button type="submit" class="bg-green-600 text-white rounded-full w-10 h-10 flex items-center justify-center focus:outline-none hover:bg-blue-600">
+      <i class="fa fa-search" aria-hidden="true"></i>
+    </button>
+  </form>
+</div>
 
-<!-- Houses Section -->
-<div class="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-  <% foundHouse.forEach(house => { %>
-    <div class="border border-gray-200 rounded-lg overflow-hidden bg-white">
-      <img src="<%= house.image.url %>" alt="House Image" class="w-full h-48 object-cover p-2 rounded-t" />
-      <div class="p-4">
-        <h2 class="text-xl font-bold mb-2 text-gray-800"><%= house.place %></h2>
-        <p class="text-gray-600 mb-2">Price: <%= house.cost %> lakhs</p>
-        <p class="text-gray-600 mb-2">Sqft: <%= house.sqft %></p>
-        <p class="text-gray-600 mb-2">BHK: <%= house.bhk %></p>
-        <p class="text-gray-600 mb-2">Address: <%= house.address %></p>
-      </div>
+<!-- Houses Section with Swiper -->
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <div class="swiper-container">
+    <div class="swiper-wrapper">
+      <% foundHouse.forEach(house => { %>
+        <div class="swiper-slide">
+          <div class="border border-gray-200 rounded-lg overflow-hidden bg-white">
+            <img src="<%= house.image.url %>" alt="House Image" class="w-full h-48 object-cover p-2 rounded-t" />
+            <div class="p-4">
+              <h2 class="text-xl font-bold mb-2 text-gray-800"><%= house.place %></h2>
+              <p class="text-gray-600 mb-2">Price: <%= house.cost %> lakhs</p>
+              <p class="text-gray-600 mb-2">Sqft: <%= house.sqft %></p>
+              <p class="text-gray-600 mb-2">BHK: <%= house.bhk %></p>
+              <p class="text-gray-600 mb-2">Address: <%= house.address %></p>
+            </div>
+          </div>
+        </div>
+      <% }); %>
     </div>
-  <% }); %>
+  </div>
 </div>
 
 <!-- Footer Section -->
@@ -99,12 +128,44 @@
     </div>
 
     <!-- Copyright and Legal -->
-    <div class="mt-8 border-t border-gray-600 pt-4 text-sm text-gray-400">
-      <p>&copy; 2024 Real Estate Company. All rights reserved.</p>
-      <p>Terms of Service | Privacy Policy</p>
-    </div>
+    <div class="mt-8 border-t border-gray-600 pt-4 text-sm
+    text-gray-400">
+    <p>&copy; 2024 Real Estate Company. All rights reserved.</p>
+    <p>Terms of Service | Privacy Policy</p>
   </div>
+</div>
 </footer>
+
+<!-- Add Swiper JS -->
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+<!-- Initialize Swiper -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var mySwiper = new Swiper(".swiper-container", {
+    slidesPerView: 1,
+    spaceBetween: 10,
+    breakpoints: {
+      640: {
+        slidesPerView: 2,
+        spaceBetween: 20,
+      },
+      768: {
+        slidesPerView: 3,
+        spaceBetween: 30,
+      },
+      1024: {
+        slidesPerView: 4,
+        spaceBetween: 40,
+      },
+    },
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+  });
+});
+</script>
 
 </body>
 </html>

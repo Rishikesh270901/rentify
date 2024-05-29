@@ -28,12 +28,28 @@ app.use(methodOverride('_method'));
 app.get("/", async (req, res) => {
   try {
     const houses = await House.find();
+    let location = [];
+    houses.forEach((house)=>{
+      if(location.indexOf(house.place) === -1){
+        location.push(house.place);
+      }
+    })
     const isLoggedIn = req.cookies.token;
-    res.render("home.ejs", { houses, isLoggedIn });
+    res.render("home.ejs", { houses, isLoggedIn, location });
   } catch (error) {
     // res.render('index',{error:error.message})
   }
 });
+
+app.get('/about', async (req, res) => {
+  const isLoggedIn = req.cookies.token
+  res.render('about.ejs', {isLoggedIn})
+})
+
+app.get('/services', async (req, res) => {
+  const isLoggedIn = req.cookies.token
+  res.render('service.ejs', {isLoggedIn})
+})
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/houses", houseRouter);

@@ -17,12 +17,14 @@ const houseCtrl = asynchandler(async (req, res) => {
     });
   }
   const { place, cost, sqft, bhk, address } = req.body;
-  if (!place || !cost || !sqft || !bhk || !address) {
+  const categories = req.body.categories;
+  if (!place || !cost || !sqft || !bhk || !address || !categories) {
     res.status(400).json({
       status: "failed",
       message: "All fields are required",
     });
   }
+
   const cloudinaryresponse = await cloudinary.uploader.upload(
     image.tempFilePath
   );
@@ -42,7 +44,8 @@ const houseCtrl = asynchandler(async (req, res) => {
       public_id: cloudinaryresponse.public_id,
       url: cloudinaryresponse.secure_url,
     },
-    address
+    address,
+    categories
   });
   await newHouse.save();
 
@@ -127,10 +130,28 @@ const deleteHouse = asynchandler(async (req, res) => {
   res.redirect("/api/v1/users/profile");
 });
 
+const filterHouse = asynchandler(async (req, res) => {
+  const categories = req.query.categories;
+  const place = req.query.place;
+  console.log(req.query);
+  if(categories && place){
+    const filter = await House.find({categories, place})
+    if(!filter) {
+      res.status(200).json({
+        message : "No such filter"
+      })
+    }
+    console.log(filter);
+    const isLoggedIn = req.cookies.token;
+    res.render('filter', { foundHouse: filter , isLoggedIn});
+  }
+})
+
 module.exports = {
   houseCtrl,
   getAllHousesCtrl,
   findHouseCtrl,
   houseUpdate,
-  deleteHouse
+  deleteHouse,
+  filterHouse
 };
