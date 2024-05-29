@@ -145,6 +145,28 @@ const filterHouse = asynchandler(async (req, res) => {
     const isLoggedIn = req.cookies.token;
     res.render('filter', { foundHouse: filter , isLoggedIn});
   }
+  if(categories){
+    const filter = await House.find({categories})
+    if(!filter) {
+      res.status(200).json({
+        message : "No such filter"
+      })
+    }
+    console.log(filter);
+    const isLoggedIn = req.cookies.token;
+    res.render('filter', { foundHouse: filter , isLoggedIn});
+  }
+  if(place){
+    const filter = await House.find({place})
+    if(!filter) {
+      res.status(200).json({
+        message : "No such filter"
+      })
+    }
+    console.log(filter);
+    const isLoggedIn = req.cookies.token;
+    res.render('filter', { foundHouse: filter , isLoggedIn});
+  }
 })
 
 module.exports = {
